@@ -8,6 +8,9 @@
     "deploy": "twilio-run deploy"
   },
   "dependencies": {
+    "axios": "^0.21.0",
+    "crypto": "^1.0.1",
+    "querystring": "^0.2.0",
     "twilio": "^3.54.0"
   },
   "devDependencies": {
