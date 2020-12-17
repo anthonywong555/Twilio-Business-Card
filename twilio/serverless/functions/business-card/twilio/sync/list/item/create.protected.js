@@ -46,7 +46,7 @@ const loadServerlessModules = (serverlessContext, serverlessEvent) => {
 const driver = async (serverlessContext, serverlessEvent, serverlessHelper, twilioClient) => {
   try {
     const {SYNC_SERVICE_SID} = serverlessContext;
-    const {SYNC_LIST_NAME, payload} = serverlessEvent;
+    const {uniqueName, payload} = serverlessEvent;
 
     const shouldListCreate = (serverlessEvent.shouldListCreate === true) ?
       true : false;
@@ -54,7 +54,7 @@ const driver = async (serverlessContext, serverlessEvent, serverlessHelper, twil
     // Insert in Sync List Item
     const result = await serverlessHelper.
       sync.
-      insertSyncListItem(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_NAME, payload, shouldListCreate);
+      createListItem(twilioClient, SYNC_SERVICE_SID, uniqueName, payload, shouldListCreate);
     return result;
   } catch (e) {
     throw serverlessHelper.devtools.formatErrorMsg(serverlessContext, SERVERLESS_FILE_PATH, 'driver', e);
