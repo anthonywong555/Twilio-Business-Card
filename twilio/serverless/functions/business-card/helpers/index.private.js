@@ -11,11 +11,11 @@ class Helpers {
     this.logger = new loggerLib(context, event);
 
     /*
-     * Load Sync Service Helper Methods
+     * Load Dev Tools Helper Methods
      */
-    const syncPath = functions['business-card/helpers/sync'].path;
-    const syncLib = require(syncPath).SyncHelper;
-    this.sync = new syncLib(this.logger);
+    const devtoolsPath = functions['business-card/helpers/devtools'].path;
+    const devtoolsLib = require(devtoolsPath).DevToolsHelper;
+    this.devtools = new devtoolsLib(this.logger);
 
     /*
      * Load Twilio Helper Methods
@@ -24,12 +24,19 @@ class Helpers {
     const twilioLib = require(twilioPath).TwilioHelper;
     this.twilio = new twilioLib(this.logger);
 
-    /*
-     * Load Dev Tools Helper Methods
+    /**
+     * Load Phone Number Helper Methods
      */
-    const devtoolsPath = functions['business-card/helpers/devtools'].path;
-    const devtoolsLib = require(devtoolsPath).DevToolsHelper;
-    this.devtools = new devtoolsLib(this.logger);
+    const phoneNumberPath = functions['business-card/helpers/phoneNumber'].path;
+    const phoneNumberLib = require(phoneNumberPath).PhoneNumberHelper;
+    this.phoneNumber = new phoneNumberLib(this.logger);
+
+    /*
+     * Load Sync Service Helper Methods
+     */
+    const syncPath = functions['business-card/helpers/sync'].path;
+    const syncLib = require(syncPath).SyncHelper;
+    this.sync = new syncLib(this.logger);
   }
 }
 
