@@ -1,6 +1,6 @@
 'use strict';
 
-const SERVERLESS_FILE_PATH = '/twilio/phoneNumber/buy';
+const SERVERLESS_FILE_PATH = '/twilio/sync/list/item/create';
 
 /**
  * Twilio calls this method
@@ -45,9 +45,17 @@ const loadServerlessModules = (serverlessContext, serverlessEvent) => {
  */
 const driver = async (serverlessContext, serverlessEvent, serverlessHelper, twilioClient) => {
   try {
-    const {type, isoCountry, howMany} = serverlessEvent;
-    const phoneNumbers = await serverlessHelper.phoneNumber.buyPhoneNumbers(twilioClient, type, isoCountry, howMany);
-    return phoneNumbers;
+    const {SYNC_SERVICE_SID} = serverlessContext;
+    const {SYNC_LIST_NAME, payload} = serverlessEvent;
+
+    const shouldListCreate = (serverlessEvent.shouldListCreate === true) ?
+      true : false;
+
+    // Insert in Sync List Item
+    const result = await serverlessHelper.
+      sync.
+      insertSyncListItem(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_NAME, payload, shouldListCreate);
+    return result;
   } catch (e) {
     throw serverlessHelper.devtools.formatErrorMsg(serverlessContext, SERVERLESS_FILE_PATH, 'driver', e);
   }
