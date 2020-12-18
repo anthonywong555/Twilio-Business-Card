@@ -46,7 +46,7 @@ const loadServerlessModules = (serverlessContext, serverlessEvent) => {
 const driver = async (serverlessContext, serverlessEvent, serverlessHelper, twilioClient) => {
   try {
     const {SYNC_SERVICE_SID} = serverlessContext;
-    const {uniqueName, payload} = serverlessEvent;
+    const {mapName, payload} = serverlessEvent;
 
     const shouldMapCreate = (serverlessEvent.shouldMapCreate === true) ?
       true : false;
@@ -54,7 +54,7 @@ const driver = async (serverlessContext, serverlessEvent, serverlessHelper, twil
     // Upsert in Sync Map Item
     const result = await serverlessHelper.
       sync.
-      upsertMapItem(twilioClient, SYNC_SERVICE_SID, uniqueName, payload, shouldMapCreate);
+      upsertMapItem(twilioClient, SYNC_SERVICE_SID, mapName, payload, shouldMapCreate);
     return result;
   } catch (e) {
     throw serverlessHelper.devtools.formatErrorMsg(serverlessContext, SERVERLESS_FILE_PATH, 'driver', e);

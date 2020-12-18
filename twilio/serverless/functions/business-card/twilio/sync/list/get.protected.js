@@ -1,6 +1,6 @@
 'use strict';
 
-const SERVERLESS_FILE_PATH = '/twilio/sync/list/item/create';
+const SERVERLESS_FILE_PATH = '/twilio/sync/list/get';
 
 /**
  * Twilio calls this method

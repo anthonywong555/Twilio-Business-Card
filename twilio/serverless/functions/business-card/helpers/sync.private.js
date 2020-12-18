@@ -52,43 +52,34 @@ class SyncHelper {
    */
   async upsertMapItem(twilioClient, serviceSid, mapUniqueName, payload, shouldMapCreate=false) {
     try {
-      try {
-        try {
-          const result = await twilioClient.sync
-            .services(serviceSid)
-            .syncMaps(mapUniqueName)
-            .syncMapItems
-            .create({...payload});
-          return result;
-        } catch(e) {
-          if(e.message === `An Item with given key already exists in the Map`) {
-            // Update the Map Item.
-            const {key, data} = payload;
-            const result = await twilioClient.sync
-              .services(serviceSid)
-              .syncMaps(mapUniqueName)
-              .syncMapItems(key)
-              .update({data});
-            return result;
-          }
-        }
-      } catch(e) {
-        if(e.message === `The requested resource /Services/${serviceSid}/Maps/${mapUniqueName}/Items was not found` && shouldMapCreate) {
-          // Create the sync map
-          await twilioClient.sync
-            .services(serviceSid)
-            .syncMaps
-            .create({
-              uniqueName: mapUniqueName
-            });
-          // Reinsert the sync map item.
-          const result = await this.upsertMapItem(twilioClient, serviceSid, mapUniqueName, payload, shouldMapCreate);
-          return result;
-        } else {
-          throw e;
-        }
-      }
+      const result = await twilioClient.sync
+      .services(serviceSid)
+      .syncMaps(mapUniqueName)
+      .syncMapItems
+      .create({...payload});
+      return result;
     } catch(e) {
+      if(e.message === `An Item with given key already exists in the Map`) {
+        // Update the Map Item.
+        const {key, data} = payload;
+        const result = await twilioClient.sync
+        .services(serviceSid)
+        .syncMaps(mapUniqueName)
+        .syncMapItems(key)
+        .update({data});
+        return result;
+      } else if(e.message === `The requested resource /Services/${serviceSid}/Maps/${mapUniqueName}/Items was not found` && shouldMapCreate) {
+        // Create the sync map
+        await twilioClient.sync
+        .services(serviceSid)
+        .syncMaps
+        .create({
+          uniqueName: mapUniqueName
+        });
+        // Reinsert the sync map item.
+        const result = await this.upsertMapItem(twilioClient, serviceSid, mapUniqueName, payload, shouldMapCreate);
+        return result;
+      }
       throw e;
     }
   }

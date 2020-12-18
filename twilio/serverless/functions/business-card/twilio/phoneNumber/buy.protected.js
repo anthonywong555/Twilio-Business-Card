@@ -47,7 +47,7 @@ const driver = async (serverlessContext, serverlessEvent, serverlessHelper, twil
   try {
     const {type, isoCountry, howMany} = serverlessEvent;
     const phoneNumbers = await serverlessHelper.phoneNumber.buyPhoneNumbers(twilioClient, type, isoCountry, howMany);
-    return phoneNumbers;
+    return {phoneNumbers};
   } catch (e) {
     throw serverlessHelper.devtools.formatErrorMsg(serverlessContext, SERVERLESS_FILE_PATH, 'driver', e);
   }
